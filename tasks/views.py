@@ -34,8 +34,17 @@ class TaskListCreateView(ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     
     def perform_create(self, serializer):
-        project = get_object_or_404(Project, id=self.kwargs['pk'], owner=self.request.user)
+        project = get_object_or_404(Project, id=self.kwargs['project_id'], owner=self.request.user)
         serializer.save(project=project)
     
     def get_queryset(self):
-        return Task.objects.filter(project__id=self.kwargs['pk'], project__owner=self.request.user)
+        return Task.objects.filter(project__id=self.kwargs['project_id'], project__owner=self.request.user)
+    
+
+class TaskDetailView(RetrieveUpdateDestroyAPIView):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        return Task.objects.filter(project__id=self.kwargs['project_id'], project__owner=self.request.user)
