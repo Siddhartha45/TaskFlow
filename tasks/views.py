@@ -38,7 +38,22 @@ class TaskListCreateView(ListCreateAPIView):
         serializer.save(project=project)
     
     def get_queryset(self):
-        return Task.objects.filter(project__id=self.kwargs['project_id'], project__owner=self.request.user)
+        queryset = Task.objects.filter(project__id=self.kwargs['project_id'], project__owner=self.request.user)
+        
+        status = self.request.query_params.get('status')
+        priority = self.request.query_params.get('priority')
+        due_date = self.request.query_params.get('due_date')
+        
+        if status:
+            queryset = queryset.filter(status=status)
+        
+        if priority:
+            queryset = queryset.filter(priority=priority)
+        
+        if due_date:
+            queryset = queryset.filter(due_date=due_date)
+        
+        return queryset
     
 
 class TaskDetailView(RetrieveUpdateDestroyAPIView):
