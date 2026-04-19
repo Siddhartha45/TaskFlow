@@ -102,18 +102,19 @@ class TaskExportView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, project_id, format=None):
-        project = get_object_or_404(Project, id=project_id)
+        project = get_object_or_404(Project, id=project_id, owner=self.request.user)
 
-        if project.owner != self.request.user:
-            return Response(
-                {"detail": "No Project matches the given query."},
-                status=status.HTTP_404_NOT_FOUND,
-            )
-
-        tasks = Task.objects.filter(project=project, project__owner=self.request.user)
+        tasks = Task.objects.filter(project=project)
         serializer = TaskSerializer(tasks, many=True)
 
-        columns = ["title", "description", "status", "priority", "due_date"]
+        columns = [
+            "title",
+            "description",
+            "status",
+            "priority",
+            "due_date",
+            "created_at",
+        ]
 
         df = pd.DataFrame(serializer.data).reindex(columns=columns)
 
@@ -124,6 +125,7 @@ class TaskExportView(APIView):
                 "status": "Status",
                 "priority": "Priority",
                 "due_date": "Due Date",
+                "created_at": "Created At",
             }
         )
 
