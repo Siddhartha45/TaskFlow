@@ -1,6 +1,7 @@
-venv/
-db.sqlite3
 __pycache__
+venv/
+.env
 celerybeat-schedule.bak
 celerybeat-schedule.dat
 celerybeat-schedule.dir
+db.sqlite3
