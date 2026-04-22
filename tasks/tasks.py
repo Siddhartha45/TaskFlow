@@ -3,6 +3,7 @@ from django.core.mail import send_mail
 from celery import shared_task
 from collections import defaultdict
 from django.contrib.auth import get_user_model
+from decouple import config
 
 from .models import Task
 
@@ -34,7 +35,7 @@ def task_reminder():
         send_mail(
         f'Task Reminder: {len(user_tasks)} task(s) due tomorrow',
         message,
-        'sid@example.com',
+        config('EMAIL_HOST_USER'),
         [user.email],
         fail_silently=False,
     )

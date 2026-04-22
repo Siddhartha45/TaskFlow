@@ -23,6 +23,3 @@ COPY . .
 
 # Signals this container expects to recieve traffic on 8000
 EXPOSE 8000
-
-# Executes when the container starts
-CMD ["gunicorn", "taskflow.wsgi:application", "--bind", "0.0.0.0:8000"]
