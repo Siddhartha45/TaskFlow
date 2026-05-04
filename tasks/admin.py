@@ -7,7 +7,15 @@ class ProjectAdmin(admin.ModelAdmin):
 
 
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ["id", "title", "status", "priority", "project__id", "project__owner", "due_date"]
+    list_display = [
+        "id",
+        "title",
+        "status",
+        "priority",
+        "project__id",
+        "project__owner",
+        "due_date",
+    ]
 
 
 admin.site.register(Project, ProjectAdmin)
